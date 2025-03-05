@@ -62,6 +62,16 @@ Bloomtoon is perfect for anyone who loves plants and wants to improve their plan
 ### 🌿 **Team Overview**
 We are **P.L.A.N.T.S.**—a team of passionate developers, data scientists, and creators who aim to bridge the gap between nature and technology. Together, we’re developing Bloomtoon to make plant care fun, informative, and accessible to everyone.
 
+## 🌱 **Team Roles**
+
+| Name                  | Primary Role               | Secondary Role                     |
+|-----------------------|----------------------------|------------------------------------|
+| **Stephen Oke**       | TBD                        | TBD                                |
+| **Ibrahim Faruquee**  | TBD                        | TBD                                |
+| **Lu Yao**            | TBD                        | TBD                                |
+| **Keira James**       | TBD                        | TBD                                |
+
+
 ### 🌱 **Team Roles**
 
 - **Data Collector & Cleaner**  
