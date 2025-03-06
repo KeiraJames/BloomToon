@@ -60,7 +60,7 @@ Bloomtoon is perfect for anyone who loves plants and wants to improve their plan
 ## **Team P.L.A.N.T.S.**
 
 ### 🌿 **Team Overview**
-We are **P.L.A.N.T.S.**—a team of passionate developers, data scientists, and creators who aim to bridge the gap between nature and technology. Together, we’re developing Bloomtoon to make plant care fun, informative, and accessible to everyone.
+We are **P.L.A.N.T.S.**—a team of passionate data scientists, and creators who, with this project, aim to bridge the gap between nature and technology. Together, we’re developing Bloomtoon to make plant care fun, informative, and accessible to everyone.
 
 ## 🌱 **Team Roles**
 
