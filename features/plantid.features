@@ -1,0 +1,35 @@
+Feature: Plant Identification via Image Upload
+	As a plant enthusiast
+	I want to upload a picture of a plant
+	So that I can identify its species
+
+Scenario: Successful Plant Identification
+	Given I press the + sign on the profile page
+	Then a pop-up page with option to upload a plant picture appears
+	When I upload a clear image of a plant with distinguishable features
+	Then the system processes the image using pre-trained models
+	And the system provides the correct name of the plant species within 15 seconds
+	When I click save on the bottom
+	Then the plant is added to my profile and stored in the database 
+	And return to the profile page
+	And now it can be viewed in my profile
+
+Scenario: Image Upload with Poor Quality
+	Given I press the + sign on the profile page
+	Then a pop-up page with option to upload a plant picture appears
+	When I upload a blurry or low-quality image of a plant
+	Then a system prompts with "upload a better quality image for accurate identification" appear
+
+Scenario: No Plant Detected in Image
+	Given I press the + sign on the profile page
+	Then a pop-up page with option to upload a plant picture appears
+	When I upload a image that does not contain a plant (e.g., an image of a rock, landscape, or abstract image)
+	Then a system prompts with "No plant detected in the image upload an image with a plant" appear
+
+Scenario: Image of a Plant that is not in the system 
+	Given I press the + sign on the profile page
+	Then a pop-up page with option to upload a plant picture appears
+	When I upload a clear image of a plant with distinguishable features
+	Then the system processes the image using pre-trained models
+	And the system does not have data in its existing databases for the plant
+	Then the system prompts with “There is currently no information about this plant” appear
