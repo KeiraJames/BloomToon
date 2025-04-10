@@ -1,0 +1,23 @@
+Feature: Basic Care Tips Display
+	As a plant owner
+	I want to receive general care tips after identifying my plant
+	so that I know how to properly care for it
+
+Scenario: Care Tips for Identified Plant
+	Given I click the plant profile
+	Then a page with two options Caretip and chatbot appear
+	When I select the caretip option
+	Then caretip page appears
+	And the page displays the general care tips for that plant and clear recommendations (watering, sunlight, and soil type, with each category appropriately filled out based on the plant species)
+	Then I press save on the bottom left 
+	And return to plants profile
+
+Scenario: User Receives Generic or Incomplete Care Tips
+	Given I click the plant profile
+	Then a page with two options Caretip and chatbot appear
+	When I select the caretip option
+	Then caretip page appears
+	When the system is unable to pull specific care details from its database for that plant species
+	And the page shows very generic or incomplete care tips (“Water regularly” instead of specifics on frequency or soil preferences)
+	Then I press discard on the bottom left
+	And I return to plants profile
