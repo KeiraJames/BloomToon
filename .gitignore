@@ -2,3 +2,4 @@ temp_file
 temp_file.pub
 .DS_Store
 __pycache__/
+.env
