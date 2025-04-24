@@ -1,4 +1,4 @@
-# Bloomtoon: AI Powered Plant Care Comics
+# Bloomtoon: AI Powered Plant Care AI Helper
 
 **Bloomtoon** is a fun and helpful app designed to make plant care both educational and entertaining by providing personalized plant care tips through engaging comic strips. It combines the beauty of nature with creativity, making learning about plant care accessible, fun, and stress-free. Whether you're a beginner or a seasoned plant enthusiast, Bloomtoon offers something for everyone.
 
