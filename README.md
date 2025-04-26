@@ -1,4 +1,4 @@
-# Bloomtoon: AI Powered Plant Care Comics
+# Bloomtoon: AI Powered Plant Care AI Helper
 
 **Bloomtoon** is a fun and helpful app designed to make plant care both educational and entertaining by providing personalized plant care tips through engaging comic strips. It combines the beauty of nature with creativity, making learning about plant care accessible, fun, and stress-free. Whether you're a beginner or a seasoned plant enthusiast, Bloomtoon offers something for everyone.
 
@@ -66,9 +66,9 @@ We are **P.L.A.N.T.S.**—a team of passionate data scientists, and creators who
 
 | Name                  | Primary Role               | Secondary Role                     |
 |-----------------------|----------------------------|------------------------------------|
-| **Stephen Oke**       | TBD                        | TBD                                |
+| **Stephen Oke**       | FrontEnd Dev                        | TBD                                |
 | **Ibrahim Faruquee**  | TBD                        | TBD                                |
-| **Lu Yao**            | TBD                        | TBD                                |
+| **Lu Yao**            | Model Dev                        | TBD                                |
 | **Keira James**       | TBD                        | TBD                                |
 
 
