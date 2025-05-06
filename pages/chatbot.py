@@ -12,6 +12,10 @@ from datetime import datetime
 # Use api_config for keys
 from api_config import PLANTNET_API_KEY, GEMINI_API_KEY
 import streamlit.components.v1 as components
+import cv2
+import numpy as np
+from PIL import Image
+from pages.plant_stats import get_latest_temperature_and_moisture
 
 # ===== Animation HTML =====
 # IMPORTANT: Replace the placeholder in the img src attribute!
@@ -37,7 +41,7 @@ PLANTNET_URL = "https://my-api.plantnet.org/v2/identify/all"
 # Use the imported GEMINI_API_KEY
 GEMINI_API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
 EASTERN_TZ = pytz.timezone('US/Eastern')
-PLANT_CARE_FILE = "plants_with_personality3_copy.json" # Use the original filename
+PLANT_CARE_FILE = "plants_with_personality-3.json" # Use the original filename
 
 # =======================================================
 # ===== IMAGE DISPLAY HELPER FUNCTION =====
@@ -165,6 +169,25 @@ def identify_plant(image_bytes):
         print(f"ERROR: Unexpected PlantNet Error: {e}")
         return {'error': f"Unexpected Error: {e}"}
 
+def get_expected_colors_from_gemini(plant_name):
+    """Uses Gemini API to infer expected natural colors of a healthy plant."""
+    prompt = f"What are the natural colors of a healthy {plant_name} plant, including leaves, flowers, and stems? Respond with a short list of color words only."
+    messages = [{"role": "user", "parts": [{"text": prompt}]}]
+    try:
+        result = send_message(messages)
+        color_keywords = ["green", "yellow", "red", "brown", "purple", "white", "pink", "orange"]
+        result_lower = result.lower()
+        return [color for color in color_keywords if color in result_lower]
+    except Exception as e:
+        print(f"Gemini color extraction failed: {e}")
+        return []
+def is_unhealthy_by_color_ratio(expected_colors, unhealthy_ratio):
+    if "yellow" in expected_colors or "brown" in expected_colors:
+        return unhealthy_ratio > 0.85  # Allow high yellow if expected
+    return unhealthy_ratio > 0.25
+
+
+
 def create_personality_profile(care_info):
     """Creates personality details, handling missing data and types."""
     default_personality = {"title": "Standard Plant", "traits": "observant", "prompt": "You are a plant. Respond factually but briefly."}
@@ -274,6 +297,7 @@ def chat_with_plant(care_info, conversation_history, id_result=None): # Add id_r
         temp = care_info.get('Temperature Range', 'not specified')
         feeding = care_info.get('Feeding Schedule', 'not specified')
         toxicity = care_info.get('Toxicity', 'not specified')
+    
 
         # Construct Enhanced System Prompt with specific details
         system_prompt = f"""
@@ -503,9 +527,12 @@ def display_care_instructions(care_info):
 
     name = care_info.get('Plant Name', 'This Plant')
     st.subheader(f"🌱 {name} Care Guide")
+    unhealthy_ratio = compute_unhealthy_ratio(st.session_state.uploaded_file_bytes)
+    health_score = max(0, 1 - unhealthy_ratio)
+    percent = int(health_score * 100)
 
     with st.expander("📋 Care Summary", expanded=True):
-        c1, c2 = st.columns(2)
+        c1, c2,c3 = st.columns(3)
         with c1:
             st.markdown("**☀️ Light**")
             st.caption(f"{care_info.get('Light Requirements', 'N/A')}")
@@ -520,6 +547,15 @@ def display_care_instructions(care_info):
             st.caption(f"{care_info.get('Feeding Schedule', 'N/A')}")
             st.markdown("**⚠️ Toxicity**")
             st.caption(f"{care_info.get('Toxicity', 'N/A')}")
+        with c3:
+            st.markdown("**❤️ Overall Health** ")
+            st.caption(display_pulse_animation(health_score))
+            st.markdown(f"**❤️ Live Plant Stats**")
+            if "temperature" in st.session_state and "moisture" in st.session_state:
+                st.write("Temperature 🌡️: ", f"{st.session_state['temperature']} °F")
+                st.write("Moisture 💧: ", f"{st.session_state['moisture']}")
+            else:
+                st.info("Click the button to load stats.")
 
     # Display "Additional Care" / "Pro Tips" only if present
     additional_care = care_info.get('Additional Care')
@@ -528,6 +564,15 @@ def display_care_instructions(care_info):
              # Use st.markdown to render potential markdown in the tips
              st.markdown(additional_care)
 
+def compute_unhealthy_ratio(image_bytes):
+    image = Image.open(BytesIO(image_bytes)).convert("RGB")
+    np_img = np.array(image)
+    hsv = cv2.cvtColor(np_img, cv2.COLOR_RGB2HSV)
+    brown_mask = cv2.inRange(hsv, (10, 50, 20), (30, 255, 200))
+    yellow_mask = cv2.inRange(hsv, (20, 100, 100), (35, 255, 255))
+    unhealthy_pixels = cv2.countNonZero(brown_mask + yellow_mask)
+    total_pixels = np_img.shape[0] * np_img.shape[1]
+    return unhealthy_pixels / total_pixels
 
 def find_similar_plant_matches(id_result, plant_care_data, limit=3, score_threshold=60):
     if not id_result or 'error' in id_result or not plant_care_data:
@@ -642,6 +687,35 @@ def display_suggestion_buttons(suggestions):
 
             st.rerun() # Rerun to display the new care info and chat for the selected suggestion
 
+def display_pulse_animation(health_score):
+    # Decide animation speed: healthier = smoother pulse
+    if health_score > 0.75:
+        pulse_color = "lime"
+        speed = "1s"
+        height_mod = "2"  # High pulse
+    elif health_score > 0.4:
+        pulse_color = "orange"
+        speed = "1.5s"
+        height_mod = "1.2"  # Medium pulse
+    else:
+        pulse_color = "red"
+        speed = "2.5s"
+        height_mod = "0.5"  # Weak pulse
+
+    svg_html = f"""
+    <div style="background: black; padding: 15px; border-radius: 10px;">
+        <svg viewBox="0 0 100 10" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="width: 100%; height: 40px;">
+            <polyline points="0,5 10,5 15,{5 - float(height_mod)} 20,{5 + float(height_mod)} 25,5 35,5 40,{5 - float(height_mod)} 45,{5 + float(height_mod)} 50,5 60,5 65,{5 - float(height_mod)} 70,{5 + float(height_mod)} 75,5 100,5"
+                      stroke="{pulse_color}" stroke-width="0.5" fill="none">
+                <animate attributeName="stroke-dashoffset"
+                         values="100;0"
+                         dur="{speed}"
+                         repeatCount="indefinite" />
+            </polyline>
+        </svg>
+    </div>
+    """
+    st.markdown(svg_html, unsafe_allow_html=True)
 
 def display_chat_interface(current_plant_care_info=None, plant_id_result=None): # Make care_info optional, add id_result
     """Displays the chat UI, handles both specific and generic chat modes."""
@@ -758,6 +832,29 @@ def display_chat_interface(current_plant_care_info=None, plant_id_result=None): 
 # --- Main App Logic ---
 def main():
     st.set_page_config(page_title="Plant Buddy", page_icon="🌿", layout="wide")
+    #===== CSS for Styling =====
+    css = """
+    <style>
+        h2 {color: white;}
+        p {color: white; font-style: Calibri;}
+    </style>
+    """
+    st.markdown(css, unsafe_allow_html=True)
+    st.markdown(
+        """
+        <style>
+        .stApp {
+        background-color: #324C4C;
+        background-size: 200% 200%;     
+        height: 100vh;
+        }
+        .stSidebar {
+        background-color: #2E3B3B;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 
     # --- Sidebar Navigation and Saved Plants ---
     st.sidebar.title("📚 Plant Buddy")
@@ -1011,6 +1108,24 @@ def main():
                 # --- Normal Display (Not Saving) ---
                 else:
                     display_identification_result(current_id_result_from_state) # Use ID from state
+                    if st.session_state.uploaded_file_bytes:
+                        # Get current ID result
+                        id_result = st.session_state.get("plant_id_result", {})
+                        sci_name = id_result.get("scientific_name")
+                        com_name = id_result.get("common_name")
+
+                        # Combine name options to ask Gemini
+                        name_for_gemini = com_name or sci_name or "unknown plant"
+
+                        expected_colors = get_expected_colors_from_gemini(name_for_gemini)
+
+                        # Run the existing unhealthy_ratio logic using OpenCV
+                        unhealthy_ratio = compute_unhealthy_ratio(st.session_state.uploaded_file_bytes)
+                        
+                        if is_unhealthy_by_color_ratio(expected_colors, unhealthy_ratio):
+                            st.warning("⚠️ The plant may have signs of stress or discoloration.")
+                        else:
+                            st.success("✅ The plant looks healthy based on expected color patterns.")
 
                     if 'error' not in current_id_result_from_state:
                         # Check if care info needs update (using flag)
@@ -1068,11 +1183,22 @@ def main():
                         if care_info_to_display:
                             display_care_instructions(care_info_to_display)
                             st.divider()
-                            if st.button("💾 Save Plant Profile", key="save_profile_button"):
-                                st.session_state.saving_mode = True; st.rerun()
+                            col1, col2 = st.columns(2)
+                            with col1:
+                                if st.button("💾 Save Plant Profile", key="save_profile_button"):
+                                    st.session_state.saving_mode = True
+                                    st.rerun()
+                            with col2:
+                                if st.button("📊 Show Live Stats", key="display_Stats_c3"):
+                                    temp, moisture = get_latest_temperature_and_moisture()
+                                    st.session_state["temperature"] = temp
+                                    st.session_state["moisture"] = moisture
+                                    st.session_state["display_stats"] = True
+                                    
                             st.divider()
-                            # **** Pass the retrieved 'care_info_to_display' and 'id_result_to_display' ****
                             display_chat_interface(current_plant_care_info=care_info_to_display, plant_id_result=id_result_to_display)
+                        # ===========================================================
+                    
 
                         # --- Case 2: Care Info NOT Found ---
                         else:

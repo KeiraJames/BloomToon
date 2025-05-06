@@ -64,9 +64,6 @@ st.markdown("""
 image_folder = "/Users/stephenoke/Downloads/plants"
 image_files = sorted([f for f in os.listdir(image_folder) if f.endswith(('png', 'jpg', 'jpeg'))])
 image_paths = [os.path.join(image_folder, file) for file in image_files]
-
-
-
 st.write('<p2> Welcome to Bloom Bot HQ </p2>', unsafe_allow_html=True)
 
 count = st_autorefresh(interval=3000, key="auto-refresh")
