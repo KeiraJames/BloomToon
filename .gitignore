@@ -1,0 +1,20 @@
+api_config.py
+.env
+secrets/
+config.py
+api_utils.py
+
+
+
+# Python and IDE artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+.vscode/
+*.log
+
+# Streamlit cache
+.streamlit/
