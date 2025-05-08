@@ -93,3 +93,42 @@ We are **P.L.A.N.T.S.**—a team of passionate data scientists, and creators who
 
 ## **Installation & Setup**
 
+## 🛠️ Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/yourusername/plant-identifier-app.git
+   cd plant-identifier-app
+
+2. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. **Set up environment variables**
+   Create a `.env` file in the root directory and add your API keys:
+   ```plaintext
+   PLANTNET_API_KEY=your_plantnet_api_key
+   OPENAI_API_KEY=your_openai_api_key
+   ```
+4. **▶️Run the app**
+   ```bash
+   streamlit run app.py
+   ```
+5. **📁 File Structure**
+    ```
+    plant-identifier-app/
+    │
+    ├── streamlit_app.py                # Main Streamlit app
+    ├── api_config.py                   # Your API key (not committed)
+    ├── plant_data.py              # Plant data and personality traits
+    ├── plant_net.py                  # PlantNet API wrapper 
+    ├── plant_care_instructions.json    # Plant care and personality data
+    ├── requirements.txt                # Python dependencies
+    └── README.md                       # You're here!
+    ```
+6. **📦 Requirements**
+    - `streamlit`
+    - `requests`
+    - `Pillow`
+    - `python-dotenv`
+    - `openai`  
