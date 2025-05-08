@@ -1,0 +1,26 @@
+Feature: Chatbot for Basic FAQs
+	As a user
+	I want to ask a chatbot about common plant care questions
+	So that I can get quick and reliable answers
+
+Scenario: Chatbot provides correct answer for basic care question
+	Given I click the plant profile
+	Then a page with two options Caretip and chatbot appear	
+	When I select the chatbot option
+	Then chatbot page appears
+	When I ask chatbot question 
+	Then the chatbot processes the query and matches it to predefined FAQs
+	And the chatbot responds with an accurate and established answer
+	When I asks a follow-up question about plant care
+	Then the chatbot processes the next query
+	And the chatbot provides the correct and established answer
+
+Scenario: Chatbot responds to an unrecognized question
+	Given I asks a question outside the predefined FAQs, like "How do I make my plant grow faster?"
+	When the chatbot cannot find a matching response in the database
+	Then the chatbot replies with "I’m sorry, I don't have information on that."
+
+Scenario: The user wants to leave the page
+	Given I click the X on the top right
+	When the pop up message appears
+	Then I press Yes to leave the the chatbot 

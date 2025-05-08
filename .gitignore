@@ -1,3 +1,7 @@
+temp_file
+temp_file.pub
+.DS_Store
+
 api_config.py
 .env
 secrets/
