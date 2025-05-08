@@ -66,10 +66,10 @@ We are **P.L.A.N.T.S.**—a team of passionate data scientists, and creators who
 
 | Name                  | Primary Role               | Secondary Role                     |
 |-----------------------|----------------------------|------------------------------------|
-| **Stephen Oke**       | FrontEnd Dev                        | TBD                                |
-| **Ibrahim Faruquee**  | TBD                        | TBD                                |
-| **Lu Yao**            | Model Dev                        | TBD                                |
-| **Keira James**       | TBD                        | TBD                                |
+| **Stephen Oke**       | FrontEnd Dev                     | TBD                          |
+| **Ibrahim Faruquee**  | Model Dev                        | TBD                          |
+| **Lu Yao**            | Model Dev                        | TBD                          |
+| **Keira James**       | Model Dev                        | TBD                          |
 
 
 ### 🌱 **Team Roles**
