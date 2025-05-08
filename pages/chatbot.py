@@ -565,13 +565,22 @@ def display_care_instructions(care_info):
              st.markdown(additional_care)
 
 def compute_unhealthy_ratio(image_bytes):
-    image = Image.open(BytesIO(image_bytes)).convert("RGB")
+    try:
+        # Check if the image is valid
+        image = Image.open(BytesIO(image_bytes)).convert("RGB")
+    except Exception as e:
+        st.error(f"Error loading image: {e}")
+        return 1  # Return 1 as a default value to indicate high unhealthy ratio
+
     np_img = np.array(image)
     hsv = cv2.cvtColor(np_img, cv2.COLOR_RGB2HSV)
     brown_mask = cv2.inRange(hsv, (10, 50, 20), (30, 255, 200))
     yellow_mask = cv2.inRange(hsv, (20, 100, 100), (35, 255, 255))
     unhealthy_pixels = cv2.countNonZero(brown_mask + yellow_mask)
     total_pixels = np_img.shape[0] * np_img.shape[1]
+    
+    if total_pixels == 0:  # Prevent division by zero in case of an empty image
+        return 1
     return unhealthy_pixels / total_pixels
 
 def find_similar_plant_matches(id_result, plant_care_data, limit=3, score_threshold=60):
@@ -831,7 +840,6 @@ def display_chat_interface(current_plant_care_info=None, plant_id_result=None): 
 
 # --- Main App Logic ---
 def main():
-    st.set_page_config(page_title="Plant Buddy", page_icon="🌿", layout="wide")
     #===== CSS for Styling =====
     css = """
     <style>
