@@ -22,6 +22,20 @@ def get_latest_temperature_and_moisture():
         moisture_value = latest_data.get("moisture_value")
         return temperature, moisture_value
     return None, None
+
+# Convert sensor value to percentage (capped at 1000)
+def moisture_to_percentage(sensor_value):
+    return min(sensor_value, 1000) / 1000 * 100
+
+# Define the plant mood function based on sensor value
+def plant_mood(sensor_value):
+    if sensor_value <= 400:
+        return "I'm thirsty! 🥵", "red"
+    elif sensor_value <= 700:
+        return "I'm happy! 😊", "green"
+    else:
+        return "I'm drowning! 😫", "yellow"
+
 st.title("Plant Care Monitor")
 
 # Button to fetch the latest data
@@ -50,18 +64,27 @@ if st.button("Give Me Stats Update"):
         minutes = total_seconds // 60
         seconds = total_seconds % 60
 
+        # Moisture level as a percentage
+        moisture_percentage = moisture_to_percentage(moisture_value)
+        mood, color = plant_mood(moisture_value)
+
         # Output
-       # st.write(f" {minutes} minutes, {seconds} seconds")
-
-        
-
         st.write(f"**Temperature**: {int(temperature):.0f}°F")
-        st.write(f"**Moisture Level**: {moisture_value}")
+        st.write(f"**Moisture Level**: {moisture_percentage:.1f}%")
         st.write(f"**Last Updated**: {minutes} minutes, {seconds} seconds")
+        st.write(f"Plant mood: {mood}")
 
-        if moisture_value < 400:  # Example threshold for moisture
+        # Thermometer bar (colored based on the moisture level)
+        st.markdown(f"""
+        <div style="width: 100%; background-color: #f0f0f0; border-radius: 25px; height: 30px;">
+            <div style="width: {moisture_percentage}%; background-color: {color}; border-radius: 25px; height: 100%;"></div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        # Plant status based on moisture level
+        if moisture_value <= 400:
             st.warning("Your plant needs water!")
-        elif moisture_value < 600:
+        elif moisture_value <= 700:
             st.info("Your plant is doing okay!")
         else:
             st.success("Your plant is happy and hydrated!")
