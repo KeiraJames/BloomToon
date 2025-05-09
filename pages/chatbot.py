@@ -10,7 +10,7 @@ from fuzzywuzzy import process
 import pytz
 from datetime import datetime
 # Use api_config for keys
-from api_config import PLANTNET_API_KEY, GEMINI_API_KEY
+#from api_config import PLANTNET_API_KEY, GEMINI_API_KEY
 import streamlit.components.v1 as components
 import cv2
 import numpy as np
