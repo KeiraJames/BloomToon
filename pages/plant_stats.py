@@ -51,13 +51,13 @@ if st.button("Give Me Stats Update"):
         seconds = total_seconds % 60
 
         # Output
-        st.write(f"Time since {input_str}: {minutes} minutes, {seconds} seconds")
+       # st.write(f" {minutes} minutes, {seconds} seconds")
 
         
 
         st.write(f"**Temperature**: {int(temperature):.0f}°F")
         st.write(f"**Moisture Level**: {moisture_value}")
-        st.write(f"**Last Updated**: {timestamp}")
+        st.write(f"**Last Updated**: {minutes} minutes, {seconds} seconds")
 
         if moisture_value < 400:  # Example threshold for moisture
             st.warning("Your plant needs water!")
