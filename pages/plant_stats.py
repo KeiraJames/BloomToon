@@ -11,7 +11,6 @@ db = client['temp_moisture']
 collection = db['c1']  
 
 def get_latest_stats():
-    # Fetch the latest data (no need to count documents or sort, just fetch the most recent entry)
     latest_data = collection.find_one(sort=[('timestamp', -1)])  # Sort by timestamp descending and get the most recent
     return latest_data
     
@@ -74,10 +73,13 @@ if st.button("Give Me Stats Update"):
         st.write(f"**Last Updated**: {minutes} minutes, {seconds} seconds")
         st.write(f"Plant mood: {mood}")
 
-        # Thermometer bar (colored based on the moisture level)
+        # Circle thermometer (colored based on the moisture level)
         st.markdown(f"""
-        <div style="width: 100%; background-color: #f0f0f0; border-radius: 25px; height: 30px;">
-            <div style="width: {moisture_percentage}%; background-color: {color}; border-radius: 25px; height: 100%;"></div>
+        <div style="position: relative; width: 200px; height: 200px; border-radius: 50%; border: 5px solid #ccc; background: conic-gradient(
+            {color} {moisture_percentage}%, #ddd 0%);">
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 20px; color: #333;">
+                {moisture_percentage:.1f}%
+            </div>
         </div>
         """, unsafe_allow_html=True)
 
