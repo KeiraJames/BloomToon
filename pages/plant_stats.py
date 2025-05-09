@@ -36,6 +36,28 @@ if st.button("Give Me Stats Update"):
         # Convert timestamp to a readable format
         timestamp = datetime.utcfromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
 
+        input_str = timestamp
+        input_time = datetime.strptime(input_str, "%Y-%m-%d %H:%M:%S")
+
+        # Current time
+        now = datetime.now()
+
+        # Time difference
+        delta = now - input_time
+
+        # Breakdown into days, hours, minutes, and seconds
+        days = delta.days
+        seconds = delta.seconds
+        hours = seconds // 3600
+        minutes = (seconds % 3600) // 60
+        remaining_seconds = seconds % 60
+
+        # Output
+        print(f"Time since {input_str}:")
+        print(f"{days} days, {hours} hours, {minutes} minutes, {remaining_seconds} seconds")
+
+        
+
         st.write(f"**Temperature**: {int(temperature):.0f}°F")
         st.write(f"**Moisture Level**: {moisture_value}")
         st.write(f"**Last Updated**: {timestamp}")
