@@ -53,8 +53,8 @@ if st.button("Give Me Stats Update"):
         remaining_seconds = seconds % 60
 
         # Output
-        print(f"Time since {input_str}:")
-        print(f"{days} days, {hours} hours, {minutes} minutes, {remaining_seconds} seconds")
+        st.write(f"Time since {input_str}:")
+        st.write(f"{days} days, {hours} hours, {minutes} minutes, {remaining_seconds} seconds")
 
         
 
