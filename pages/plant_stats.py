@@ -42,19 +42,16 @@ if st.button("Give Me Stats Update"):
         # Current time
         now = datetime.now()
 
-        # Time difference
+        # Time difference in seconds
         delta = now - input_time
+        total_seconds = int(delta.total_seconds())
 
-        # Breakdown into days, hours, minutes, and seconds
-        days = delta.days
-        seconds = delta.seconds
-        hours = seconds // 3600
-        minutes = (seconds % 3600) // 60
-        remaining_seconds = seconds % 60
+        # Convert to minutes and seconds
+        minutes = total_seconds // 60
+        seconds = total_seconds % 60
 
         # Output
-        st.write(f"Time since {input_str}:")
-        st.write(f"{days} days, {hours} hours, {minutes} minutes, {remaining_seconds} seconds")
+        st.write(f"Time since {input_str}: {minutes} minutes, {seconds} seconds")
 
         
 
