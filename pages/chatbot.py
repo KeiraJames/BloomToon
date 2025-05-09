@@ -19,6 +19,10 @@ from pages.plant_stats import get_latest_temperature_and_moisture
 
 # ===== Animation HTML =====
 # IMPORTANT: Replace the placeholder in the img src attribute!
+PLANTNET_API_KEY = "2b10X3YLMd8PNAuKOCVPt7MeUe"
+GEMINI_API_KEY = "AIzaSyCd-6N83gfhMx_-D4WCAc-8iOFSb6hDJ_Q"
+MONGO_URI="mongodb+srv://recent:recent@cluster0.i7fqn.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+
 loading_animation_html = """
 <!DOCTYPE html>
 <html>
