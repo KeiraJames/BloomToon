@@ -25,7 +25,7 @@ st.markdown("""
 st.markdown("<h1>Welcome to Bloom Bot HQ</h1>", unsafe_allow_html=True)
 
 # Image carousel setup
-image_folder = "/Users/stephenoke/Downloads/plants"
+image_folder = os.path.join(os.path.dirname(__file__), 'plants')
 image_files = sorted([f for f in os.listdir(image_folder) if f.lower().endswith(('png', 'jpg', 'jpeg'))])
 image_paths = [os.path.join(image_folder, file) for file in image_files]
 
